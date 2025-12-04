@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Creativiteitsmachine 3000</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  :root {
+    --bg1: #ffe8e8;
+    --bg2: #e8f7ff;
+    --bg3: #e9ffe8;
+    --bg4: #fff7e0;
+    --bg5: #f3e8ff;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg1);
+    display: flex;
+    justify-content: center;
+  }
+
+  .machine {
+    width: min(600px, 100%);
+    padding: 20px;
+    margin: 10px;
+    border-radius: 16px;
+    background: #ffffffee;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border: 3px solid #222;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 26px;
+    margin: 0 0 10px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  .display {
+    border-radius: 12px;
+    border: 2px solid #222;
+    padding: 16px;
+    min-height: 80px;
+    background: #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #ideaText {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border: 2px solid #222;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #ffd34a;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b88c11;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s;
+  }
+
+  button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #b88c11;
+    background: #ffbf00;
+  }
+
+  #printBtn {
+    background: #9be25f;
+    box-shadow: 0 4px 0 #5a9c2a;
+  }
+
+  #printBtn:active {
+    box-shadow: 0 2px 0 #5a9c2a;
+    background: #7ecb38;
+  }
+
+  .lamp-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .lamp {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ccc;
+    border: 2px solid #222;
+  }
+
+  .lamp.active {
+    background: #ff4a4a;
+    box-shadow: 0 0 8px rgba(255,0,0,0.7);
+  }
+
+  .history {
+    margin-top: 24px;
+    border-top: 2px dashed #ccc;
+    padding-top: 12px;
+  }
+
+  .history h2 {
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+
+  .history-list {
+    font-size: 14px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .history-item {
+    margin-bottom: 6px;
+    padding-left: 4px;
+  }
+
+  .history-item::before {
+    content: "• ";
+  }
+
+  .footer {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 11px;
+    color: #777;
+  }
+
+  /* Printer weergave */
+  @media print {
+    body {
+      background: #fff;
+    }
+    .machine {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    h1, .subtitle, .history, .buttons, .footer, .lamp-row {
+      display: none;
+    }
+    .display {
+      border: none;
+      background: #fff;
+      padding: 0;
+      min-height: auto;
+    }
+    #ideaText {
+      font-size: 14px;
+      text-align: left;
+      font-weight: 500;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="machine">
+  <h1>Creativiteitsmachine 3000</h1>
+  <div class="subtitle">
+    Druk op de knop voor een nieuw knutselidee
+  </div>
+
+  <div class="display">
+    <div id="ideaText">
+      Druk op "Nieuw idee" om te starten
+    </div>
+  </div>
+
+  <div class="lamp-row">
+    <div class="lamp" id="lamp1"></div>
+    <div class="lamp" id="lamp2"></div>
+    <div class="lamp" id="lamp3"></div>
+  </div>
+
+  <div class="buttons">
+    <button id="newIdeaBtn">Nieuw idee</button>
+    <button id="printBtn">Print idee</button>
+  </div>
+
+  <div class="history">
+    <h2>Eerdere ideeën</h2>
+    <div class="history-list" id="historyList">
+      Nog geen ideeën gegenereerd
+    </div>
+  </div>
+
+  <div class="footer">
+    Tip: voeg deze pagina toe aan het beginscherm als “app”
+  </div>
+</div>
+
+<!-- Optioneel: geluid. Zet een bestand "ding.mp3" naast dit HTML bestand. -->
+<audio id="dingSound" src="ding.mp3" preload="auto"></audio>
+
+<script>
+  // Lijsten: Hoe, Wat, Materiaal, Extra twist
+  const HOE = [
+    "Teken",
+    "Knutsel",
+    "Bouw",
+    "Bak",
+    "Ontwerp een spel",
+    "Ontwerp een kaartspel",
+    "Schrijf een kort verhaal",
+    "Maak een collage",
+    "Maak een mini-wereld",
+    "Bedenk een stripverhaal",
+    "Maak een stop-motion set",
+    "Ontwerp een poster",
+    "Maak een logo",
+    "Maak een uitnodiging",
+    "Maak een decorstuk",
+    "Ontwerp een personage"
+  ];
+
+  const WAT = [
+    "een dier dat nog niet bestaat",
+    "een gek gebouw in een fantasiewereld",
+    "een geheime basis voor uitvinders",
+    "een taart met speciale krachten",
+    "een plek waar alleen kinderen naartoe kunnen",
+    "een voertuig dat kan vliegen én zwemmen",
+    "een dorp op de maan",
+    "een huis in een boom",
+    "een pretpark in de wolken",
+    "een magische winkel",
+    "een dorp onder water",
+    "een school voor superhelden",
+    "een speelse draak",
+    "een robotvriend",
+    "een bibliotheek vol geheime boeken",
+    "een spelbord met missies"
+  ];
+
+  const MATERIAAL = [
+    "karton en papier",
+    "alleen dingen uit de prullenbak",
+    "oud speelgoed dat je mag slopen",
+    "touw, elastiek en wasknijpers",
+    "stiften en kleurpotloden",
+    "tijdschriften en kranten",
+    "lege doosjes en wc-rollen",
+    "keukenmateriaal dat schoon en veilig is",
+    "stofrestjes en oude kleding",
+    "papier en lijm",
+    "klein speelgoed en steentjes",
+    "alleen zwart en wit materiaal",
+    "natuurdingen zoals bladeren en takjes",
+    "lego of bouwblokjes",
+    "kralen, knopen en draad"
+  ];
+
+  const TWIST = [
+    "het moet minstens één geheim vakje hebben",
+    "er moet iets aan kunnen bewegen",
+    "je gebruikt maar twee kleuren",
+    "je maakt het samen met iemand anders",
+    "er moet een verrassing inzitten",
+    "het moet kunnen worden opgeborgen in een schoenendoos",
+    "je geeft het een naam en een achtergrondverhaal",
+    "er moet iets op zitten dat geluid kan maken",
+    "het moet bij het licht uit ook nog leuk zijn",
+    "je tekent of schrijft eerst een klein plan",
+    "je maakt er later een foto van voor in een ideeënboek",
+    "je gebruikt er minstens drie verschillende materialen in",
+    "er moet ergens een hartje verstopt zitten",
+    "je maakt er een kleine handleiding bij",
+    "je doet alsof het voor iemand anders is en bedenkt wie"
+  ];
+
+  const colors = [
+    "var(--bg1)",
+    "var(--bg2)",
+    "var(--bg3)",
+    "var(--bg4)",
+    "var(--bg5)"
+  ];
+
+  const ideaTextEl = document.getElementById("ideaText");
+  const newIdeaBtn = document.getElementById("newIdeaBtn");
+  const printBtn = document.getElementById("printBtn");
+  const historyListEl = document.getElementById("historyList");
+  const lampEls = [
+    document.getElementById("lamp1"),
+    document.getElementById("lamp2"),
+    document.getElementById("lamp3")
+  ];
+  const dingSound = document.getElementById("dingSound");
+
+  let history = [];
+
+  function pick(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function randomBg() {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.background = color;
+  }
+
+  function flashLamps() {
+    let step = 0;
+    const totalSteps = 6;
+    const interval = setInterval(() => {
+      lampEls.forEach((lamp, index) => {
+        lamp.classList.toggle("active", (step % 3) === index);
+      });
+      step++;
+      if (step > totalSteps) {
+        clearInterval(interval);
+        lampEls.forEach(l => l.classList.remove("active"));
+      }
+    }, 80);
+  }
+
+  function updateHistory(idea) {
+    history.unshift(idea);
+    if (history.length > 20) {
+      history.pop();
+    }
+    if (history.length === 0) {
+      historyListEl.textContent = "Nog geen ideeën gegenereerd";
+      return;
+    }
+    historyListEl.innerHTML = "";
+    history.forEach((item) => {
+      const div = document.createElement("div");
+      div.className = "history-item";
+      div.textContent = item;
+      historyListEl.appendChild(div);
+    });
+  }
+
+  function generateIdea() {
+    flashLamps();
+    randomBg();
+
+    try {
+      if (dingSound && dingSound.play) {
+        dingSound.currentTime = 0;
+        dingSound.play().catch(() => {});
+      }
+    } catch(e) {}
+
+    const idea = `${pick(HOE)} ${pick(WAT)} met ${pick(MATERIAAL)}, ${pick(TWIST)}.`;
+    ideaTextEl.textContent = idea;
+    updateHistory(idea);
+  }
+
+  newIdeaBtn.addEventListener("click", generateIdea);
+
+  printBtn.addEventListener("click", () => {
+    window.print();
+  });
+
+  // Optioneel: meteen een eerste idee tonen
+  // generateIdea();
+</script>
+
+</body>
+</html>
