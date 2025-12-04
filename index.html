@@ -139,7 +139,18 @@
 
   .history-item {
     margin-bottom: 6px;
-    padding-left: 4px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .history-item:hover {
+    background: #f0f0f0;
+  }
+
+  .history-item.selected {
+    background: #ffe8b3;
+    border: 1px solid #f0b400;
   }
 
   .history-item::before {
@@ -153,7 +164,6 @@
     color: #777;
   }
 
-  /* Printer weergave */
   @media print {
     body {
       background: #fff;
@@ -218,64 +228,34 @@
   </div>
 </div>
 
-<!-- Optioneel: geluid. Zet een bestand "ding.mp3" naast dit HTML bestand. -->
 <audio id="dingSound" src="ding.mp3" preload="auto"></audio>
 
 <script>
-  // Lijsten: Hoe, Wat, Materiaal, Extra twist
   const HOE = [
-    "Teken",
-    "Knutsel",
-    "Bouw",
-    "Bak",
-    "Ontwerp een spel",
-    "Ontwerp een kaartspel",
-    "Schrijf een kort verhaal",
-    "Maak een collage",
-    "Maak een mini-wereld",
-    "Bedenk een stripverhaal",
-    "Maak een stop-motion set",
-    "Ontwerp een poster",
-    "Maak een logo",
-    "Maak een uitnodiging",
-    "Maak een decorstuk",
-    "Ontwerp een personage"
+    "Teken","Knutsel","Bouw","Bak","Ontwerp een spel","Ontwerp een kaartspel",
+    "Schrijf een kort verhaal","Maak een collage","Maak een mini-wereld",
+    "Bedenk een stripverhaal","Maak een stop-motion set","Ontwerp een poster",
+    "Maak een logo","Maak een uitnodiging","Maak een decorstuk","Ontwerp een personage"
   ];
 
   const WAT = [
-    "een dier dat nog niet bestaat",
-    "een gek gebouw in een fantasiewereld",
-    "een geheime basis voor uitvinders",
-    "een taart met speciale krachten",
+    "een dier dat nog niet bestaat","een gek gebouw in een fantasiewereld",
+    "een geheime basis voor uitvinders","een taart met speciale krachten",
     "een plek waar alleen kinderen naartoe kunnen",
-    "een voertuig dat kan vliegen én zwemmen",
-    "een dorp op de maan",
-    "een huis in een boom",
-    "een pretpark in de wolken",
-    "een magische winkel",
-    "een dorp onder water",
-    "een school voor superhelden",
-    "een speelse draak",
-    "een robotvriend",
-    "een bibliotheek vol geheime boeken",
-    "een spelbord met missies"
+    "een voertuig dat kan vliegen én zwemmen","een dorp op de maan",
+    "een huis in een boom","een pretpark in de wolken","een magische winkel",
+    "een dorp onder water","een school voor superhelden","een speelse draak",
+    "een robotvriend","een bibliotheek vol geheime boeken","een spelbord met missies"
   ];
 
   const MATERIAAL = [
-    "karton en papier",
-    "alleen dingen uit de prullenbak",
-    "oud speelgoed dat je mag slopen",
-    "touw, elastiek en wasknijpers",
-    "stiften en kleurpotloden",
-    "tijdschriften en kranten",
-    "lege doosjes en wc-rollen",
-    "keukenmateriaal dat schoon en veilig is",
-    "stofrestjes en oude kleding",
-    "papier en lijm",
-    "klein speelgoed en steentjes",
-    "alleen zwart en wit materiaal",
-    "natuurdingen zoals bladeren en takjes",
-    "lego of bouwblokjes",
+    "karton en papier","alleen dingen uit de prullenbak",
+    "oud speelgoed dat je mag slopen","touw, elastiek en wasknijpers",
+    "stiften en kleurpotloden","tijdschriften en kranten",
+    "lege doosjes en wc-rollen","keukenmateriaal dat schoon en veilig is",
+    "stofrestjes en oude kleding","papier en lijm",
+    "klein speelgoed en steentjes","alleen zwart en wit materiaal",
+    "natuurdingen zoals bladeren en takjes","lego of bouwblokjes",
     "kralen, knopen en draad"
   ];
 
@@ -297,26 +277,18 @@
     "je doet alsof het voor iemand anders is en bedenkt wie"
   ];
 
-  const colors = [
-    "var(--bg1)",
-    "var(--bg2)",
-    "var(--bg3)",
-    "var(--bg4)",
-    "var(--bg5)"
-  ];
+  const colors = ["var(--bg1)","var(--bg2)","var(--bg3)","var(--bg4)","var(--bg5)"];
 
   const ideaTextEl = document.getElementById("ideaText");
   const newIdeaBtn = document.getElementById("newIdeaBtn");
   const printBtn = document.getElementById("printBtn");
   const historyListEl = document.getElementById("historyList");
-  const lampEls = [
-    document.getElementById("lamp1"),
-    document.getElementById("lamp2"),
-    document.getElementById("lamp3")
-  ];
+  const lampEls = [document.getElementById("lamp1"),document.getElementById("lamp2"),document.getElementById("lamp3")];
   const dingSound = document.getElementById("dingSound");
 
   let history = [];
+  let selectedHistoryEl = null;
+  let currentIdea = "";
 
   function pick(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -342,28 +314,39 @@
     }, 80);
   }
 
+  function selectHistoryItem(el, idea) {
+    if (selectedHistoryEl) {
+      selectedHistoryEl.classList.remove("selected");
+    }
+    selectedHistoryEl = el;
+    if (selectedHistoryEl) {
+      selectedHistoryEl.classList.add("selected");
+    }
+    currentIdea = idea;
+    ideaTextEl.textContent = idea;
+  }
+
   function updateHistory(idea) {
     history.unshift(idea);
-    if (history.length > 20) {
-      history.pop();
-    }
-    if (history.length === 0) {
-      historyListEl.textContent = "Nog geen ideeën gegenereerd";
-      return;
-    }
+    if (history.length > 50) history.pop();
     historyListEl.innerHTML = "";
-    history.forEach((item) => {
+    history.forEach((item, index) => {
       const div = document.createElement("div");
       div.className = "history-item";
       div.textContent = item;
+      div.addEventListener("click", () => {
+        selectHistoryItem(div, item);
+      });
       historyListEl.appendChild(div);
+      if (index === 0) {
+        selectHistoryItem(div, item);
+      }
     });
   }
 
   function generateIdea() {
     flashLamps();
     randomBg();
-
     try {
       if (dingSound && dingSound.play) {
         dingSound.currentTime = 0;
@@ -372,18 +355,15 @@
     } catch(e) {}
 
     const idea = `${pick(HOE)} ${pick(WAT)} met ${pick(MATERIAAL)}, ${pick(TWIST)}.`;
+    currentIdea = idea;
     ideaTextEl.textContent = idea;
     updateHistory(idea);
   }
 
   newIdeaBtn.addEventListener("click", generateIdea);
-
   printBtn.addEventListener("click", () => {
     window.print();
   });
-
-  // Optioneel: meteen een eerste idee tonen
-  // generateIdea();
 </script>
 
 </body>
