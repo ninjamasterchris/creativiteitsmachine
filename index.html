@@ -235,63 +235,146 @@
     "Teken",
     "Knutsel",
     "Bouw",
-    "Bak",
-    "Ontwerp een spel",
-    "Ontwerp een kaartspel",
-    "Schrijf een verhaal",
-    "Maak een collage",
-    "Maak een mini-wereld",
-    "Ontwerp een poster",
-    "Maak een uitnodiging",
-    "Maak een decorstuk",
-    "Ontwerp een personage",
-    "Maak een strip",
-    "Bedenk een knutselopdracht voor iemand anders"
+    "Ontwerp",
+    "Bedenk",
+    "Maak"
   ];
 
-  const THEMAS = [
-    "iets dat in de ruimte speelt",
-    "iets dat onder water leeft",
-    "iets dat in een sprookje hoort",
-    "iets in een miniwereld",
-    "iets dat op de maan gebeurt",
-    "iets dat in de jungle woont",
-    "iets dat ’s nachts tot leven komt",
-    "iets in een geheime basis",
-    "iets in een stad vol uitvinders",
-    "iets in een bos met pratende dieren",
-    "iets in een ijswereld",
-    "iets in een magische school",
-    "iets in een zwevend kasteel",
-    "iets in een oud museum",
-    "iets in een pretpark"
+  const IDEEEN = [
+    // PERSONAGES
+    "een personage dat in een stad vol uitvinders woont",
+    "een dier dat in een sprookjesbos leeft",
+    "een magisch wezen met een bijzondere kracht",
+    "een robotvriend die iemand helpt",
+    "een held die op een missie gaat",
+    "een bewaker van een verborgen schat",
+    "een minidraak die in jouw kamer zou kunnen wonen",
+    "een gids die je door dromen leidt",
+    "een personage dat in een bibliotheek vol geheimen werkt",
+    "een avonturier die door werelden springt",
+    "een klein wezen dat in een theekopje woont",
+    "een nieuwsgierige onderzoeker van vreemde plekken",
+    "een verzamelaar van magische objecten",
+    "een reiziger die overal vrienden maakt",
+    "een personage dat brieven bezorgt in een fantasiewereld",
+
+    // PLEKKEN & WERELDEN
+    "een huis dat op de maan staat",
+    "een geheime basis onder water",
+    "een dorp in een miniwereld",
+    "een eiland vol schatten",
+    "een kamer in een zwevend kasteel",
+    "een winkel waar alleen magische spullen worden verkocht",
+    "een wereld die past in een schoenendoos",
+    "een reusachtige boom waar mensen in wonen",
+    "een bos waar dieren kunnen praten",
+    "een stad die nooit slaapt",
+    "een marktplein vol vreemde uitvindingen",
+    "een verborgen tuin waar je alleen via een puzzel binnenkomt",
+    "een tunnelstelsel onder je eigen straat",
+    "een geheime plek waar tijd anders werkt",
+    "een wereld die helemaal ondersteboven is",
+
+    // VOERTUIGEN & UITVINDINGEN
+    "een voertuig dat door ruimte én water reist",
+    "een uitvindersmachine met knoppen en meters",
+    "een robot die een speciale taak heeft",
+    "een gadget dat een held zou gebruiken",
+    "een kaartlezer die portalen opent",
+    "een vliegend apparaat voor één persoon",
+    "een klein apparaat dat iets grappigs kan",
+    "een magische bril die iets bijzonders laat zien",
+    "een geheim horloge met speciale functies",
+    "een sleutel die alleen op bepaalde dagen werkt",
+
+    // SPELLEN & OBJECTEN
+    "een spelbord voor een avontuur in de jungle",
+    "een kaartspel met mysterieuze krachten",
+    "een puzzel die een verhaal vertelt",
+    "een amulet met een geheim signaal",
+    "een instrument dat een magisch geluid maakt",
+    "een toegangspas tot een verborgen wereld",
+    "een schatkist met een verhaal",
+    "een verzameling kaarten van een fantasiewereld",
+    "een doosje waarin iets magisch verstopt zit",
+    "een paspoort voor een zelfbedachte wereld",
+
+    // VERHALEN & CREATIES
+    "een illustratie van een scène uit een zelfbedacht verhaal",
+    "een mini-comic over een grappige gebeurtenis",
+    "een poster voor een nieuw fantasie-avontuur",
+    "een dagboekpagina van een verzonnen personage",
+    "een kaart van een wereld die je zelf bedenkt",
+    "een voorwerp dat iemand uit een verhaal nodig heeft",
+    "een archiefstuk uit een oude, vergeten wereld",
+    "een museumobject dat een bijzonder verleden heeft",
+    "een symbool dat hoort bij een geheime club",
+    "een uitnodiging voor een magisch feest"
   ];
 
-  const TWISTS = [
-    "met alleen afvalmateriaal",
-    "met slechts twee kleuren",
-    "met iets dat kan bewegen",
-    "dat magie krijgt als het af is",
-    "met een geheim vakje",
-    "dat ook als speelgoed kan dienen",
-    "dat je samen maakt met iemand anders",
-    "waarbij je eerst een klein schetsje maakt",
-    "dat in een schoenendoos moet passen",
-    "waar je later een foto van maakt voor een ideeënboek",
-    "waar ergens een hartje verstopt zit",
-    "waar je een mini-handleiding bij schrijft",
-    "waarbij je drie verschillende materialen gebruikt",
-    "dat je als cadeautje aan iemand zou kunnen geven",
-    "dat je later nog kunt uitbouwen"
+  const BONUS = [
+    "gebruik drie verschillende materialen",
+    "gebruik alleen dingen die je anders zou weggooien",
+    "gebruik maar twee kleuren",
+    "zorg dat er ergens een geheim vakje in zit",
+    "voeg iets toe dat kan bewegen",
+    "maak eerst een kleine schets",
+    "maak er later een foto van voor je ideeënboek",
+    "zorg dat het in een schoenendoos past",
+    "gebruik minstens één ongewoon materiaal",
+    "bedenk een naam en schrijf die erbij",
+    "schrijf één zin over het verhaal dat erbij hoort",
+    "maak het samen met iemand anders",
+    "gebruik materialen uit drie verschillende plekken in huis",
+    "zorg dat je het als speelgoed kunt gebruiken",
+    "maak een klein kaartje met uitleg",
+    "maak het kleiner dan je hand",
+    "maak het groter dan je hoofd",
+    "maak het binnen 10 minuten",
+    "maak het zonder te gummen",
+    "maak het met je niet-dominante hand",
+    "maak het terwijl je het niet mag draaien",
+    "voeg een geluidselement toe",
+    "voeg iets toe dat los kan",
+    "maak het inklapbaar",
+    "maak het rechtopstaand",
+    "voorzie het van een verpakking",
+    "schets eerst in 5 seconden",
+    "verzin een geheime functie",
+    "maak het alsof het 100 jaar oud is",
+    "maak het alsof het uit de toekomst komt",
+    "combineer een zachte en een harde textuur",
+    "gebruik een kleur die je normaal nooit kiest",
+    "gebruik alleen ronde vormen",
+    "gebruik alleen rechte lijnen",
+    "gebruik precies vijf onderdelen",
+    "voeg iets toe dat glinstert",
+    "verwerk een symbool dat ergens voor staat",
+    "bedenk hoe het klinkt",
+    "bedenk hoe het ruikt",
+    "maak een mini-kaartje met instructies",
+    "voeg een mini-verhaal van één zin toe",
+    "maak een geheime code ergens in het ontwerp",
+    "gebruik materialen die je buiten kunt vinden",
+    "maak een onderdeel dat kan draaien",
+    "gebruik geen tape",
+    "gebruik geen lijm",
+    "maak een tweede versie die beter is dan de eerste",
+    "laat iets bewegen als je blaast",
+    "bouw een verborgen verrassing in"
   ];
 
-  const colors = ["var(--bg1)","var(--bg2)","var(--bg3)","var(--bg4)","var(--bg5)"];
+  const colors = ["var(--bg1)", "var(--bg2)", "var(--bg3)", "var(--bg4)", "var(--bg5)"];
 
   const ideaTextEl = document.getElementById("ideaText");
   const newIdeaBtn = document.getElementById("newIdeaBtn");
   const printBtn = document.getElementById("printBtn");
   const historyListEl = document.getElementById("historyList");
-  const lampEls = [document.getElementById("lamp1"),document.getElementById("lamp2"),document.getElementById("lamp3")];
+  const lampEls = [
+    document.getElementById("lamp1"),
+    document.getElementById("lamp2"),
+    document.getElementById("lamp3")
+  ];
   const dingSound = document.getElementById("dingSound");
 
   let history = [];
@@ -342,9 +425,13 @@
       const div = document.createElement("div");
       div.className = "history-item";
       div.textContent = item;
-      div.addEventListener("click", () => selectHistoryItem(div, item));
+      div.addEventListener("click", () => {
+        selectHistoryItem(div, item);
+      });
       historyListEl.appendChild(div);
-      if (index === 0) selectHistoryItem(div, item);
+      if (index === 0) {
+        selectHistoryItem(div, item);
+      }
     });
   }
 
@@ -353,17 +440,19 @@
     randomBg();
     try {
       dingSound.currentTime = 0;
-      dingSound.play().catch(()=>{});
-    } catch(e){}
+      dingSound.play().catch(() => {});
+    } catch (e) {}
 
-    const idea = `${pick(WERKVORMEN)} ${pick(THEMAS)}, ${pick(TWISTS)}.`;
+    const idea = `${pick(WERKVORMEN)} ${pick(IDEEEN)}. Bonus: ${pick(BONUS)}.`;
     currentIdea = idea;
     ideaTextEl.textContent = idea;
     updateHistory(idea);
   }
 
   newIdeaBtn.addEventListener("click", generateIdea);
-  printBtn.addEventListener("click", () => window.print());
+  printBtn.addEventListener("click", () => {
+    window.print();
+  });
 </script>
 
 </body>
