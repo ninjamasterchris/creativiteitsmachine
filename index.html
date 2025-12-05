@@ -2,12 +2,9 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Creativiteitsmachine 3000</title>
+<title>Sofies Creativiteitsmachine 3000</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Sofies Machine">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="theme-color" content="#ffe8e8">
+
 <style>
   :root {
     --bg1: #ffe8e8;
@@ -103,6 +100,16 @@
     background: #7ecb38;
   }
 
+  #funPrintBtn {
+    background: #b0a7ff;
+    box-shadow: 0 4px 0 #6a63c0;
+  }
+
+  #funPrintBtn:active {
+    box-shadow: 0 2px 0 #6a63c0;
+    background: #948bff;
+  }
+
   .lamp-row {
     display: flex;
     justify-content: center;
@@ -167,44 +174,81 @@
     color: #777;
   }
 
-  @media print {
-    body {
-      background: #fff;
-    }
-    .machine {
-      box-shadow: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-    }
-    h1, .subtitle, .history, .buttons, .footer, .lamp-row {
-      display: none;
-    }
-    .display {
-      border: none;
-      background: #fff;
-      padding: 0;
-      min-height: auto;
-    }
-    #ideaText {
-      font-size: 14px;
-      text-align: left;
-      font-weight: 500;
-    }
+  /* FunPrint weergave, standaard verborgen */
+  .funprint-view {
+    display: none;
+    width: min(600px, 100%);
+    padding: 20px;
+    margin: 10px;
+    background: #ffffff;
   }
+
+  .funprint-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .funprint-subtitle {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .funprint-actions {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .funprint-list {
+    border-top: 1px solid #000;
+    padding-top: 8px;
+  }
+
+  .funprint-card {
+    padding: 8px 0;
+    border-bottom: 1px dashed #000;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .funprint-number {
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .funprint-idea {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .in-funprint-mode body {
+    background: #fff;
+  }
+
+  /* In FunPrint modus: verberg machine, toon funprint-view */
+  .in-funprint-mode .machine {
+    display: none;
+  }
+
+  .in-funprint-mode .funprint-view {
+    display: block;
+  }
+
 </style>
 </head>
 <body>
 
 <div class="machine">
-  <h1>Creativiteitsmachine 3000</h1>
+  <h1>Sofies Creativiteitsmachine 3000</h1>
   <div class="subtitle">
     Hoi Sofie, druk op de knop voor een nieuw idee
   </div>
 
   <div class="display">
     <div id="ideaText">
-      Druk op "Nieuw idee" om te starten
+      Hoi Sofie, druk op "Nieuw idee" om te starten
     </div>
   </div>
 
@@ -217,18 +261,31 @@
   <div class="buttons">
     <button id="newIdeaBtn">Nieuw idee</button>
     <button id="printBtn">Print idee</button>
+    <button id="funPrintBtn">FunPrint modus</button>
   </div>
 
   <div class="history">
-    <h2>Eerdere ideeën</h2>
+    <h2>Eerdere ideeën van Sofie</h2>
     <div class="history-list" id="historyList">
       Nog geen ideeën gegenereerd
     </div>
   </div>
 
   <div class="footer">
-    Gemaakt speciaal voor Sofie Tammes
+    Gemaakt speciaal voor Sofie
   </div>
+</div>
+
+<!-- FunPrint layout, wordt gevuld als je op FunPrint modus klikt -->
+<div id="funprintView" class="funprint-view">
+  <div class="funprint-title">Sofies ideeën</div>
+  <div class="funprint-subtitle">Deze pagina kun je printen in de FunPrint app</div>
+
+  <div class="funprint-actions">
+    <button id="backToMachineBtn">Terug naar machine</button>
+  </div>
+
+  <div id="funprintList" class="funprint-list"></div>
 </div>
 
 <audio id="dingSound" src="ding.mp3" preload="auto"></audio>
@@ -372,7 +429,10 @@
   const ideaTextEl = document.getElementById("ideaText");
   const newIdeaBtn = document.getElementById("newIdeaBtn");
   const printBtn = document.getElementById("printBtn");
+  const funPrintBtn = document.getElementById("funPrintBtn");
+  const backToMachineBtn = document.getElementById("backToMachineBtn");
   const historyListEl = document.getElementById("historyList");
+  const funprintListEl = document.getElementById("funprintList");
   const lampEls = [
     document.getElementById("lamp1"),
     document.getElementById("lamp2"),
@@ -452,9 +512,50 @@
     updateHistory(idea);
   }
 
+  function renderFunPrintView() {
+    if (history.length === 0) {
+      generateIdea();
+    }
+
+    funprintListEl.innerHTML = "";
+    history.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "funprint-card";
+
+      const num = document.createElement("div");
+      num.className = "funprint-number";
+      num.textContent = `Idee ${history.length - index}`;
+
+      const txt = document.createElement("div");
+      txt.className = "funprint-idea";
+      txt.textContent = item;
+
+      card.appendChild(num);
+      card.appendChild(txt);
+      funprintListEl.appendChild(card);
+    });
+
+    document.documentElement.classList.add("in-funprint-mode");
+    window.scrollTo(0, 0);
+  }
+
+  function exitFunPrintMode() {
+    document.documentElement.classList.remove("in-funprint-mode");
+    window.scrollTo(0, 0);
+  }
+
   newIdeaBtn.addEventListener("click", generateIdea);
+
   printBtn.addEventListener("click", () => {
     window.print();
+  });
+
+  funPrintBtn.addEventListener("click", () => {
+    renderFunPrintView();
+  });
+
+  backToMachineBtn.addEventListener("click", () => {
+    exitFunPrintMode();
   });
 </script>
 
